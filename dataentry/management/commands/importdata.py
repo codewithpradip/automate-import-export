@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand, CommandError
-# from dataentry.models import Student
 from django.apps import apps
 import csv
 
@@ -30,6 +29,7 @@ class Command(BaseCommand):
         
         if not model:
             raise CommandError(f'Model "{model_name}" not found in any apps !')
+            
         with open(file_path, 'r') as file:
              # Reads CSV files and maps the information into a dictionary.
             reader = csv.DictReader(file)
