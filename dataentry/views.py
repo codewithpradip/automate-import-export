@@ -6,6 +6,8 @@ from django.core.management import call_command
 from django.contrib import messages
 
 # Create your views here.
+
+
 def import_data(request):
     if request.method == 'POST':
         file_path = request.FILES.get('file_path')

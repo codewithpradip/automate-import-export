@@ -136,3 +136,6 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
     50: "critical",
 }
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://redis:6379/0'

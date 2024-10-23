@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: automate-import-export-image
+    container_name: automate-import-export-container
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  
+  redis:
+    image: "redis:alpine"
+    container_name: redis-container
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  celery:
+    build: .
+    container_name: celery-container
+    command: celery --app=automate_import_export_main worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - app
+
+volumes:
+  redis_data:
