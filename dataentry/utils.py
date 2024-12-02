@@ -2,6 +2,8 @@ from django.apps import apps
 from django.core.management.base import CommandError
 import csv
 from django.db.utils import DataError
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 def get_all_custom_model():
     exclude_model = ['LogEntry', 'Permission', 'Group', 'ContentType', 'Session', 'Upload']
@@ -39,3 +41,13 @@ def check_csv_error(file_path, model_name):
         raise e
 
     return model
+
+
+def send_email_notification(mail_subjest, message, to_email):
+    """ Send email notification to the user. """
+    try:
+        from_email = settings.DEFAULT_FROM_EMAIL
+        mail = EmailMessage(mail_subjest, message, from_email, to=[to_email])
+        mail.send()
+    except exception as e:
+        raise e

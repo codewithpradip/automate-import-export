@@ -1,4 +1,5 @@
 Django
 redis
 celery
+python-decouple
 

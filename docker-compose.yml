@@ -28,6 +28,7 @@ services:
 
   celery:
     build: .
+    image: celery-image
     container_name: celery-container
     command: celery --app=automate_import_export_main worker --loglevel=info
     volumes:
