@@ -2,7 +2,7 @@ import csv
 from django.core.management import BaseCommand, CommandError
 from django.apps import apps
 import datetime
-
+from dataentry.utils import generate_csv_file
 
 # Custom management command - python manage.py exportdata model_name
 class Command(BaseCommand):
@@ -16,6 +16,7 @@ class Command(BaseCommand):
         model_name = kwargs['model_name'].capitalize()
 
         model= None
+        # search through all the installed apps for the model
         for app_config in apps.get_app_configs():
             try:
                 model = apps.get_model(app_config.label, model_name)
@@ -30,12 +31,8 @@ class Command(BaseCommand):
         # Fetch the data form database
         data = model.objects.all()
 
-        # generate timestap of the current Data/Time
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    
-        # Define the csv file name/path
-        file_path = f'exported_{model_name}_data_{timestamp}.csv'
-
+        file_path = generate_csv_file(model_name)
+       
         # Open the csv file and write the data
         with open(file_path, 'w', newline='') as file:
             writer = csv.writer(file)
